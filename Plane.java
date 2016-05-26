@@ -2,12 +2,11 @@ import java.util.*;
 
 public class Plane {
     private int layer;
-    private int[][] cgcPlane, bpcPlane;
+    private int[][] cgcPlane;
     private List<Segment> segments;
 
-    public Plane(int[][] bpc, int[][] cgc, int i) {
+    public Plane(int[][] cgc, int i) {
         cgcPlane = cgc.clone();
-        bpcPlane = bpc.clone();
 
         layer = i;
 
@@ -18,7 +17,7 @@ public class Plane {
     }
 
     public String toString() {
-        String result = "Plane " + layer + "\r\n";
+        String result = "Plane " + layer + "\r\n\r\nCGC Plane\r\n";
         for(int k = 0; k < cgcPlane.length; k++) {
             for(int j = 0; j < cgcPlane[0].length; j++) result += cgcPlane[k][j] + " ";
             result += "\r\n";
@@ -28,10 +27,6 @@ public class Plane {
 
     public int getCGCBit(int r, int c) {//row r, column c, not xy coordinates
         return cgcPlane[r][c];
-    }
-
-    public int getBPCBit(int r, int c) {//row r, column c, not xy coordinates
-        return bpcPlane[r][c];
     }
 
     public int getWidth() {

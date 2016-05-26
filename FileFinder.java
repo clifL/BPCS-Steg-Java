@@ -25,8 +25,8 @@ public class FileFinder {
         System.out.println(fileCount + " files hidden.");
         int q = 8; //record current index
         for(int j = 0; j < fileCount; j++) {
-            int size = constructFile(q, j);
-            q += size;
+            int bitsTaken = constructFile(q, j);
+            q += bitsTaken;
         }
 
         System.out.println("Hidden files extracted, in directory ExtractedPayloads!");

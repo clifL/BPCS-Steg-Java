@@ -10,6 +10,8 @@ public class PayloadFileProcessor {
         allBytes = new ArrayList<Byte>();
         allBytes.add((byte) (fileNames.length - 128)); //first byte records the number of files hidden
 
+        System.out.println(fileNames.length + " files hidden.");
+
         for(String fileName : fileNames) {
             byte[] temp = buildByteFile(fileName);
             for(byte chunk : temp) allBytes.add(chunk);
@@ -26,6 +28,9 @@ public class PayloadFileProcessor {
     public byte[] buildByteFile(String fileName) throws IOException, FileNotFoundException {
         File payload = new File("Payloads/" + fileName);
         int fileLength = (int) payload.length();
+
+        System.out.println("File size: " + fileLength + " bytes");
+        System.out.println("File name: " + fileName);
 
         FileInputStream fis = new FileInputStream(payload);
 
@@ -46,7 +51,7 @@ public class PayloadFileProcessor {
         for(int k = 5; k < 5 + fileName.length(); k++) byteForm[k] = (byte) (fileName.charAt(j++) - 128);
         //reads in the name of the file
 
-        return fileName.length() + 5; //returns where to continue
+        return fileName.length() + 5; //returns where to continue storing
     }
 
     public void bitify() {

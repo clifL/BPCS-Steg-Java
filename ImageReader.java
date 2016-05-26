@@ -42,14 +42,8 @@ public class ImageReader {
 
         for(int i = 0; i < 24; i++) { //24 bitplanes
             int[][] cgc = new int[height][width];
-            int[][] bpc = new int[height][width];
-            for(int j = 0; j < height; j++) {
-                for(int k = 0; k < width; k++) {
-                    bpc[j][k] = pixels[j][k].getBit(i);
-                    cgc[j][k] = (i < 21)? pixels[j][k].getBit(i) ^ pixels[j][k].getBit(i + 3) : pixels[j][k].getBit(i); //convert to CGC notation
-                }
-            }
-            planes[i] = new Plane(bpc, cgc, i);
+            for(int j = 0; j < height; j++) for(int k = 0; k < width; k++) cgc[j][k] = (i < 21)? pixels[j][k].getBit(i) ^ pixels[j][k].getBit(i + 3) : pixels[j][k].getBit(i); //convert to CGC notation
+            planes[i] = new Plane(cgc, i);
         }
     }
 
