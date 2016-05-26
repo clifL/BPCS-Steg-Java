@@ -24,7 +24,7 @@ public class StegResultProcessor {
         for(int j = 0; j < height; j++) {
             for(int k = 0; k < width; k++) {
                 int[] temp = new int[24];
-                for(int i = 0; i < 24; i++) temp[i] = planes[i].getBit(j, k);
+                for(int i = 0; i < 24; i++) temp[i] = (i < 21)? planes[i].getCGCBit(j, k) ^ planes[i + 3].getBPCBit(j, k) : planes[i].getCGCBit(j, k);
                 pixels[j][k] = new Pixel(temp);
             }
         }

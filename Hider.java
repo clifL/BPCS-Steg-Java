@@ -20,7 +20,6 @@ public class Hider {
         System.out.print("Enter names of payload files (separated by semicolons): ");
         PayloadFileProcessor payload = new PayloadFileProcessor(key.next().split(";"));
 
-
         System.out.println("Payload processed.");
         System.out.println("Total # of blocks: " + payload.blockLength() + "\n" + payload.getNumOfConjugated() + " blocks needed to be conjugated.");
 

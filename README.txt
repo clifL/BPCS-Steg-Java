@@ -1,4 +1,4 @@
-I'm Shin-Yi Chu, and my AP Comp Sci Final Project is BPCS Steganography!!
+I'm Shin-Yi, and my AP Comp Sci Final Project is BPCS Steganography!!
 
 BPCS stands for  Bit-Plane Complexity Segmentation Steganography. This algorithm was developed by Eiji Kawaguchi and Richard O. Eason at the Kyushu Institute of Technology, and a brief PDF describing it is also in the "Professional Papers" folder. This method is very efficient at storing more data than the traditional Least Significant Bit (LSB) algorithm for steganography, while ensuring that modified images are indistinguishable from the original.
 
