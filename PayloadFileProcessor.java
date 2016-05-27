@@ -29,7 +29,7 @@ public class PayloadFileProcessor {
         File payload = new File("Payloads/" + fileName);
         int fileLength = (int) payload.length();
 
-        System.out.println("File size: " + fileLength + " bytes");
+        System.out.println("File size: " + (fileLength / 1024) + " KB");
         System.out.println("File name: " + fileName);
 
         FileInputStream fis = new FileInputStream(payload);

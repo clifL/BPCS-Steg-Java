@@ -38,7 +38,7 @@ public class FileFinder {
 
         int prefixLength = 40 + fileName.length() * 8; //in bits
 
-        System.out.println("File size: " + fileLength + " bytes");
+        System.out.println("File size: " + (fileLength / 1024) + " KB");
         System.out.println("File name: " + fileName);
 
         byte[] byteForm = new byte[fileLength];

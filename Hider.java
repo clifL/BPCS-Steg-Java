@@ -16,7 +16,7 @@ public class Hider {
         List<Segment> vesselComplexSegments = vessel.getComplexSegmentsOfImage();
         //now list of complex segments from ALL planes has been constructed
         System.out.println("Complex segments available: " + vesselComplexSegments.size());
-        System.out.println("Converted to bytes: " + vesselComplexSegments.size() * 63 / 8);
+        System.out.println("Converted to bytes: " + vesselComplexSegments.size() * 63 / 8192 + " KB");
 
         System.out.print("Enter names of payload files (separated by semicolons): ");
         PayloadFileProcessor payload = new PayloadFileProcessor(key.next().split(";"));
