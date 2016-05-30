@@ -16,16 +16,20 @@ public class StegResultProcessor {
         this("Result.png");
     }
 
-    public void processPlanes(Plane[] planes) {
-        height = planes[0].getHeight();
-        width = planes[0].getWidth();
+    public void processPlanes(Plane[] rgbPlanes, Plane[] alphaPlanes) {
+        height = rgbPlanes[0].getHeight();
+        width = rgbPlanes[0].getWidth();
         pixels = new Pixel[height][width];
 
         for(int j = 0; j < height; j++) {
             for(int k = 0; k < width; k++) {
-                int[] temp = new int[24];
-                for(int i = 0; i < 24; i++) temp[i] = planes[i].getCGCBit(j, k);
-                pixels[j][k] = new Pixel(temp);
+                int[] rgb = new int[24];
+                for(int i = 0; i < 24; i++) rgb[i] = rgbPlanes[i].getBit(j, k);
+
+                int[] alpha = new int[8];
+                for(int i = 0; i < 8; i++) alpha[i] = alphaPlanes[i].getBit(j, k);
+
+                pixels[j][k] = new Pixel(rgb, alpha);
             }
         }
     }

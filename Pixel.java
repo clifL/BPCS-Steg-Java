@@ -1,18 +1,23 @@
 import java.awt.Color;
 
 public class Pixel {
-    private int bpcRed, cgcRed, bpcGreen, cgcGreen, bpcBlue, cgcBlue;
-    private int[] cgcBits; //from lsb to msb, from blue to red
+    private int alpha, bpcRed, cgcRed, bpcGreen, cgcGreen, bpcBlue, cgcBlue;
+    private int[] cgcBits, alphaBits; //from lsb to msb, from blue to red
 
-    public Pixel(int rgb) {
+    public Pixel(int rgba) {
         //read and convert each to cgc
-        bpcRed = (rgb >> 16) & 0xFF;
+        alpha = (rgba >> 24) & 0xFF;
+
+        alphaBits = new int[8];
+        for(int j = 0; j < 8; j++) alphaBits[j] = (alpha >> j) % 2;
+
+        bpcRed = (rgba >> 16) & 0xFF;
         cgcRed = getCGC(bpcRed);
 
-        bpcGreen = (rgb >> 8) & 0xFF;
+        bpcGreen = (rgba >> 8) & 0xFF;
         cgcGreen = getCGC(bpcGreen);
 
-        bpcBlue = (rgb >> 0) & 0xFF;
+        bpcBlue = (rgba) & 0xFF;
         cgcBlue = getCGC(bpcBlue);
 
         cgcBits = new int[24];
@@ -24,14 +29,17 @@ public class Pixel {
         //operation shifts num j bits to the right, then masks everything except least significant
     }
 
-    public Pixel(int[] cgcBitsArr) {
+    public Pixel(int[] cgcBitsArr, int[] alphaBitsArr) {
         cgcBits = cgcBitsArr.clone();
+        alphaBits = alphaBitsArr.clone();
 
         for(int j = 0; j < 24; j++) {
             if(j % 3 == 0) cgcBlue += (cgcBits[j] << (j / 3));
             else if(j % 3 == 1) cgcGreen += (cgcBits[j] << (j / 3));
             else cgcRed += (cgcBits[j] << (j / 3));
         }
+
+        for(int j = 0; j < 8; j++) alpha += (alphaBits[j] << j);
 
         bpcRed = getBPC(cgcRed);
         bpcGreen = getBPC(cgcGreen);
@@ -52,7 +60,11 @@ public class Pixel {
         return cgcBits[dex];
     }
 
+    public int getAlphaBit(int dex) {
+        return alphaBits[dex];
+    }
+
     public int getRGB() {
-        return (new Color(bpcRed, bpcGreen, bpcBlue)).getRGB();
+        return (alpha << 24) | (bpcRed << 16) | (bpcGreen << 8) | (bpcBlue);
     }
 }

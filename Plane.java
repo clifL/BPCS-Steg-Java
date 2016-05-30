@@ -25,7 +25,7 @@ public class Plane {
         return result;
     }
 
-    public int getCGCBit(int r, int c) {//row r, column c, not xy coordinates
+    public int getBit(int r, int c) {//row r, column c, not xy coordinates
         return plane[r][c];
     }
 

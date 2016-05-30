@@ -25,14 +25,14 @@ public class FileFinder {
         System.out.println(fileCount + " files hidden.");
         int q = 8; //record current index
         for(int j = 0; j < fileCount; j++) {
-            int bitsTaken = constructFile(q, j);
+            int bitsTaken = constructFile(q);
             q += bitsTaken;
         }
 
         System.out.println("Hidden files extracted, in directory ExtractedPayloads!");
     }
 
-    public int constructFile(int loc, int count) throws IOException { //also returns fileLength
+    public int constructFile(int loc) throws IOException { //also returns fileLength
         int fileLength = getLength(loc); //in bytes
         String fileName = getFileName(loc);
 

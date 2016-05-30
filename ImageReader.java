@@ -7,7 +7,7 @@ import java.util.*;
 public class ImageReader {
     private Pixel[][] pixels;
     private int width, height;
-    private Plane[] planes;
+    private Plane[] rgbPlanes, alphaPlanes;
 
     public ImageReader(String fileName) throws IOException {
         BufferedImage image = ImageIO.read(new File(fileName));
@@ -28,29 +28,37 @@ public class ImageReader {
         this("Vessel.png");
     }
 
-    public Plane[] getPlanes() {
-        return planes;
+    public Plane[] getRGBPlanes() {
+        return rgbPlanes;
     }
 
-    //returns ith bit plane
-    public Plane getBitPlane(int i) {
-        return planes[i];
+    public Plane[] getAlphaPlanes() {
+        return alphaPlanes;
     }
 
     public void planify() throws IOException {
-        planes = new Plane[24];
+        rgbPlanes = new Plane[24];
+        alphaPlanes = new Plane[8];
 
-        for(int i = 0; i < 24; i++) { //24 bitplanes
-            int[][] temp = new int[height][width];
-            for(int j = 0; j < height; j++) for(int k = 0; k < width; k++) temp[j][k] = pixels[j][k].getCGCBit(i);
-            planes[i] = new Plane(temp, i);
+        for(int i = 0; i < 24; i++) { //24 rgb bit planes
+            int[][] rgb = new int[height][width];
+            for(int j = 0; j < height; j++) for(int k = 0; k < width; k++) rgb[j][k] = pixels[j][k].getCGCBit(i);
+            rgbPlanes[i] = new Plane(rgb, i);
         }
+
+        for(int i = 0; i < 8; i++) {
+            int[][] alpha = new int[height][width];
+            for(int j = 0; j < height; j++) for(int k = 0; k < width; k++) alpha[j][k] = pixels[j][k].getAlphaBit(i);
+            alphaPlanes[i] = new Plane(alpha, i);
+        }
+
     }
 
-    public List<Segment> getComplexSegmentsOfImage() {
-        List<Segment> complexSegments = new ArrayList<Segment>();
-        for(int i = 0; i < 24; i++) complexSegments.addAll(planes[i].getComplexSegmentsOfPlane());
-        return complexSegments;
+    public List<Segment> getHiderSegments() {
+        List<Segment> hiderSegments = new ArrayList<Segment>();
+        for(int i = 0; i < 24; i++) hiderSegments.addAll(rgbPlanes[i].getComplexSegmentsOfPlane());
+        for(int i = 0; i < 1; i++) hiderSegments.addAll(alphaPlanes[i].getAllSegments());
+        return hiderSegments;
     }
 
 }
