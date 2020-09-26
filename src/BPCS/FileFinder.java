@@ -1,7 +1,9 @@
 package BPCS;
 
+
 import java.util.*;
 import java.io.*;
+import java.nio.file.*;
 
 public class FileFinder {
     private int[] bitForm;
@@ -22,21 +24,37 @@ public class FileFinder {
         }
     }
 
-    public void constructFiles() throws IOException {
+    public List<Path> extractPayload(Path outputPath) throws IOException {
         int fileCount = getNumOfFiles();
         System.out.println(fileCount + " files hidden.");
         int q = 8; //record current index
+
+        // String[] payloads = new String[fileCount];
+        List<Path> extractedPayloadPaths = new ArrayList<Path>();
+
         for(int j = 0; j < fileCount; j++) {
-            int bitsTaken = constructFile(q);
-            q += bitsTaken;
+            ExtractedPayload extractedPayload = extractPayload(q);
+
+            Path extractedPayloadPath = outputPath.resolve(extractedPayload.filePath.getFileName());
+
+            extractedPayloadPaths.add(extractedPayloadPath);
+            q += extractedPayload.bitsTaken;
+
+            
+            FileOutputStream fos = new FileOutputStream(extractedPayloadPath.toAbsolutePath().toString());
+            fos.write(extractedPayload.byteForm);
+            fos.close();
         }
 
         System.out.println("Hidden files extracted, in directory ExtractedPayloads!");
+
+        return extractedPayloadPaths;
     }
 
-    public int constructFile(int loc) throws IOException { //also returns fileLength
+    public ExtractedPayload extractPayload(int loc) throws IOException { //also returns fileLength
         int fileLength = getLength(loc); //in bytes
         String fileName = getFileName(loc);
+        Path filePath = Paths.get(fileName);
 
         int prefixLength = 40 + fileName.length() * 8; //in bits
 
@@ -51,12 +69,18 @@ public class FileFinder {
             byteForm[(m - prefixLength - loc) / 8] = (byte) (store - 128);
         }
 
-        FileOutputStream fos = new FileOutputStream(fileName);
-        fos.write(byteForm);
-        fos.close();
+        // FileOutputStream fos = new FileOutputStream(fileName);
+        // fos.write(byteForm);
+        // fos.close();
 
-        return prefixLength + fileLength * 8;
+        // return prefixLength + fileLength * 8;
+
+        int bitsTaken = prefixLength + fileLength * 8;
+
+        ExtractedPayload ret = new ExtractedPayload(byteForm, bitsTaken, filePath);
+        return ret;
     }
+
 
     public int getNumOfFiles() {
         int numOfFiles = 0;

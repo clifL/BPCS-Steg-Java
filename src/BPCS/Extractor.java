@@ -4,7 +4,7 @@ import java.util.*;
 import java.nio.file.*;
 
 public class Extractor {
-    public static void ExtractPayload(Path stegoPath) throws Exception {
+    public static List<Path> ExtractPayload(Path stegoPath, Path outputPath) throws Exception {
         Scanner key = new Scanner(System.in);
 
         System.out.print("Enter name of image file with secret payload: ");
@@ -16,6 +16,8 @@ public class Extractor {
         System.out.println("Converted to bytes: " + resultHiderSegments.size() * 63 / 8192 + " KB");
 
         FileFinder secret = new FileFinder(resultHiderSegments);
-        secret.constructFiles();
+        List<Path> extractedPayloadPaths = secret.extractPayload(outputPath);
+
+        return extractedPayloadPaths;
     }
 }

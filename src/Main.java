@@ -1,17 +1,28 @@
 import BPCS.Hider;
 import BPCS.Extractor;
+
+import java.util.*;
 import java.nio.file.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        // Hider a = new Hider();
+        
+        // cover image by path
         Path vessel = Paths.get("resources/Vessels/Beagle.png");
+        // payload by path
         Path payload = Paths.get("resources/Payloads/payload2.txt");
-        Path output = Paths.get("resources/Payloads/output.png");
-
-        Path stego = output;
+        // output by path
+        Path output = Paths.get("resources/StegResults/output.png");
 
         Hider.HidePayload(vessel, payload, output);
-        Extractor.ExtractPayload(stego);
+
+        // stego-ed image by path
+        Path stego = output;
+        // output into.. by path
+        Path output2 = Paths.get("resources/ExtractedPayloads");
+
+        List<Path> extractedPayloads = Extractor.ExtractPayload(stego, output2);
+
+        int a = 1;
     }
 }

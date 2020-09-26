@@ -23,10 +23,9 @@ public class Hider {
 
         System.out.print("Enter names of payload files (separated by semicolons): ");
 
-        String[] test = payloadPath.toAbsolutePath().toString().split(";");
+        String[] payloadFiles = payloadPath.toAbsolutePath().toString().split(";");
         
-
-        PayloadFileProcessor payload = new PayloadFileProcessor(test);
+        PayloadFileProcessor payload = new PayloadFileProcessor(payloadFiles);
 
         System.out.println("Payload processed.");
         System.out.println("Total # of blocks: " + payload.blockLength());
