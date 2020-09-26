@@ -1,16 +1,19 @@
-import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
-import java.awt.Desktop;
+package BPCS;
+
 import java.util.*;
+import java.nio.file.*;
 
 public class Hider {
-    public static void main(String[] args) throws Exception {
+    public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{        
+
         Scanner key = new Scanner(System.in);
 
         System.out.print("Enter name of vessel image: ");
-        ImageReader vessel = new ImageReader("Vessels/" + key.next());
+        
+        System.out.print(vesselPath.toAbsolutePath().toString());
+
+        ImageReader vessel = new ImageReader(vesselPath.toAbsolutePath().toString());
+
         System.out.println("Vessel processed.");
 
         List<Segment> vesselHiderSegments = vessel.getHiderSegments();
@@ -19,7 +22,11 @@ public class Hider {
         System.out.println("Converted to bytes: " + vesselHiderSegments.size() * 63 / 8192 + " KB");
 
         System.out.print("Enter names of payload files (separated by semicolons): ");
-        PayloadFileProcessor payload = new PayloadFileProcessor(key.next().split(";"));
+
+        String[] test = payloadPath.toAbsolutePath().toString().split(";");
+        
+
+        PayloadFileProcessor payload = new PayloadFileProcessor(test);
 
         System.out.println("Payload processed.");
         System.out.println("Total # of blocks: " + payload.blockLength());
@@ -33,11 +40,13 @@ public class Hider {
         System.out.println("Data blocks hidden.");
 
         System.out.print("Enter name of result image: ");
-        StegResultProcessor result = new StegResultProcessor(key.next());
+        StegResultProcessor result = new StegResultProcessor(outputPath.toAbsolutePath().toString());
 
         result.processPlanes(vessel.getRGBPlanes(), vessel.getAlphaPlanes()); //planes have already been modified
         result.constructImage();
 
         System.out.println("Result image generated!");
+
+        key.close();
     }
 }

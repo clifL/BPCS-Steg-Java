@@ -1,3 +1,5 @@
+package BPCS;
+
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,7 +11,7 @@ public class StegResultProcessor {
     private String name;
 
     public StegResultProcessor(String name) {
-        this.name = "StegResults/" + name;
+        this.name = name;
     }
 
     public StegResultProcessor() {

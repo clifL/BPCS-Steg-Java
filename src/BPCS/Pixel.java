@@ -1,3 +1,5 @@
+package BPCS;
+
 import java.awt.Color;
 
 public class Pixel {

@@ -1,3 +1,5 @@
+package BPCS;
+
 public class Block implements Chunk {
     private int[][] bl;
     private boolean conjugated;

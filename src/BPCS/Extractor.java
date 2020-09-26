@@ -1,16 +1,14 @@
-import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
-import java.awt.Desktop;
+package BPCS;
+
 import java.util.*;
+import java.nio.file.*;
 
 public class Extractor {
-    public static void main(String[] args) throws Exception {
+    public static void ExtractPayload(Path stegoPath) throws Exception {
         Scanner key = new Scanner(System.in);
 
         System.out.print("Enter name of image file with secret payload: ");
-        ImageReader extraction = new ImageReader("StegResults/" + key.next());
+        ImageReader extraction = new ImageReader(stegoPath.toAbsolutePath().toString());
 
         List<Segment> resultHiderSegments = extraction.getHiderSegments();
 

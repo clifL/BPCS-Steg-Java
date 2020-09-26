@@ -1,2 +1,10 @@
-package.bluej
-*.ctxt
+/bin
+/.git
+/.vscode
+.project
+.classpath
+*.jpg
+/build/bin
+/build/class
+/resources/ExtractedPayloads/*
+/resources/StegResults/*

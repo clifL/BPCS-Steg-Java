@@ -1,3 +1,5 @@
+package BPCS;
+
 import java.util.*;
 import java.io.*;
 
@@ -49,7 +51,7 @@ public class FileFinder {
             byteForm[(m - prefixLength - loc) / 8] = (byte) (store - 128);
         }
 
-        FileOutputStream fos = new FileOutputStream("ExtractedPayloads/" + fileName);
+        FileOutputStream fos = new FileOutputStream(fileName);
         fos.write(byteForm);
         fos.close();
 

@@ -1,3 +1,5 @@
+package BPCS;
+
 import java.util.*;
 import java.io.*;
 
@@ -26,7 +28,7 @@ public class PayloadFileProcessor {
     }
 
     public byte[] buildByteFile(String fileName) throws IOException, FileNotFoundException {
-        File payload = new File("Payloads/" + fileName);
+        File payload = new File(fileName);
         int fileLength = (int) payload.length();
 
         System.out.println("File size: " + (fileLength / 1024) + " KB");
