@@ -236,6 +236,7 @@ public class GUI {
 		panel_decode.setLayout(null);
 		
 		JLabel LabelTitle = new JLabel("Decryption ");
+		LabelTitle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		LabelTitle.setBounds(25, 10, 120, 42);
 		panel_decode.add(LabelTitle);
 		
@@ -244,7 +245,6 @@ public class GUI {
 		txtDecodePathFile.setColumns(10);
 		txtDecodePathFile.setBounds(25, 62, 359, 20);
 		panel_decode.add(txtDecodePathFile);
-		
 		
 		
 		JLabel OriginalPicPreview = new JLabel("Original Preview");
@@ -264,19 +264,16 @@ public class GUI {
 					return;
 				}
 			
-				
-				
 				{
 				
 					Path p1 = Paths.get(DecrptFilePath);
 					Path outputOfExtract = Paths.get("");
-					
-					//  public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{     
+					    
 					try {
 						List<Path> listOfOutputs = Extractor.ExtractPayload(p1,outputOfExtract );
 						decodeResult.add(new DecodedResult(p1,outputOfExtract ));
 						JOptionPane.showMessageDialog(null, "Operation Success", "Completed", JOptionPane.INFORMATION_MESSAGE);
-						//btnClear.doClick();
+						btnClear.doClick();
 	
 						for(int i =  0; i < listOfOutputs.size(); i++) {
 							System.out.println("The image name is " + listOfOutputs.get(i).toString());
@@ -306,12 +303,7 @@ public class GUI {
 		btnDecode.setBounds(48, 588, 193, 33);
 		panel_decode.add(btnDecode);
 		
-		JButton btnClear_1 = new JButton("Clear");
-		btnClear_1.setForeground(Color.DARK_GRAY);
-		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnClear_1.setBounds(270, 588, 199, 33);
-		panel_decode.add(btnClear_1);
-		
+	
 		JLabel DecodePicPreview = new JLabel("Decode Preview");
 		DecodePicPreview.setOpaque(true);
 		DecodePicPreview.setHorizontalAlignment(SwingConstants.CENTER);
@@ -332,5 +324,21 @@ public class GUI {
 		});
 		btnDecodePic.setBounds(406, 61, 103, 23);
 		panel_decode.add(btnDecodePic);
+		
+		JButton btnClear_1 = new JButton("Clear");
+		btnClear_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DecrptFilePath = "";
+				OriginalPicPreview.setIcon(null);
+				DecodePicPreview.setIcon(null);
+				txtDecodePathFile.setText("No file chosen");
+			}
+		});
+		btnClear_1.setForeground(Color.DARK_GRAY);
+		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnClear_1.setBounds(270, 588, 199, 33);
+		panel_decode.add(btnClear_1);
 	}
+	
+	
 }
