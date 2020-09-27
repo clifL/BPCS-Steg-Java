@@ -26,6 +26,7 @@ public class GUI {
 	public String coverImagePath;
 	public String secretFilePath;
 	private JFrame frame;
+	private JTextField txtExtractorFilePath;
 
 	/**
 	 * Launch the application.
@@ -164,14 +165,6 @@ public class GUI {
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnClear.setBounds(497, 590, 506, 46);
 		panel.add(btnClear);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Decode", null, panel_1, null);
-		panel_1.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(126, 58, 46, 14);
-		panel_1.add(lblNewLabel);
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Result", null, panel_2, null);
