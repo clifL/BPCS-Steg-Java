@@ -1,15 +1,21 @@
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+
+import BPCS.Extractor;
+import BPCS.Hider;
 import javax.swing.JSplitPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import javax.swing.JLabel;
@@ -19,18 +25,24 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
 
 public class GUI {
 
-	
-	public String coverImagePath;
-	public String secretFilePath;
+	//Reference to encodedResult arraylist when doing view page or decode page. encodedResult contains all the past encoded result paths.
+	public ArrayList<EncodedResult> encodedResult = new ArrayList<EncodedResult>();
+	private String coverImagePath;
+	private String coverImageExtensionType;
+	private String secretFilePath;
+	private String saveAsPath;
 	private JFrame frame;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -95,6 +107,7 @@ public class GUI {
 		btnChooseCover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coverImagePath = HelperFunctions.SelectFile();
+				coverImageExtensionType = HelperFunctions.GetFileExtension(coverImagePath);
 				txtCoverFilePath.setText(coverImagePath);
 				ImageIcon img = new ImageIcon(new ImageIcon(coverImagePath).getImage().getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
 				coverImage.setIcon(img);
@@ -136,27 +149,17 @@ public class GUI {
 		btnChooseSecret.setBounds(890, 48, 103, 23);
 		panel.add(btnChooseSecret);
 		
-		
-		
-		JButton btnGenerate = new JButton("Generate");
-		btnGenerate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnGenerate.setForeground(Color.DARK_GRAY);
-		btnGenerate.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnGenerate.setBounds(0, 590, 497, 46);
-		panel.add(btnGenerate);
-		
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coverImagePath = "";
 				secretFilePath = "";
+				coverImageExtensionType = "";
+				saveAsPath = "";
 				secretImage.setIcon(null);
 				coverImage.setIcon(null);
-				txtCoverFilePath.setText("");
-				txtSecretFilePath.setText("");
+				txtCoverFilePath.setText("No file chosen");
+				txtSecretFilePath.setText("No file chosen");
 
 			}
 		});
@@ -164,6 +167,56 @@ public class GUI {
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnClear.setBounds(497, 590, 506, 46);
 		panel.add(btnClear);
+		
+		JButton btnGenerate = new JButton("Generate");
+		btnGenerate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Validation
+				if ((coverImagePath == "") || (coverImagePath == null))
+				{
+					JOptionPane.showMessageDialog(null, "Please input a cover image!", "Missing input", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				else if((secretFilePath == "") || (secretFilePath == null))
+				{
+					JOptionPane.showMessageDialog(null, "Please input a secret file (payload)!", "Missing input", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				System.out.println(coverImageExtensionType);
+				saveAsPath = HelperFunctions.SaveFile(coverImageExtensionType); 
+				if (saveAsPath != "")
+				{
+					saveAsPath = saveAsPath + "." + coverImageExtensionType;
+					Path p1 = Paths.get(coverImagePath);
+					Path p2 = Paths.get(secretFilePath);
+					Path p3 = Paths.get(saveAsPath);
+					//  public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{     
+					try {
+						Hider.HidePayload(p1, p2, p3);
+						encodedResult.add(new EncodedResult(p1, p2, p3));
+						JOptionPane.showMessageDialog(null, "Operation Success", "Completed", JOptionPane.INFORMATION_MESSAGE);
+						btnClear.doClick();
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				else 
+				{
+					JOptionPane.showMessageDialog(null, "Operation cancelled", "Cancel", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+				
+			}
+		});
+		btnGenerate.setForeground(Color.DARK_GRAY);
+		btnGenerate.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnGenerate.setBounds(0, 590, 497, 46);
+		panel.add(btnGenerate);
+		
+		
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Decode", null, panel_1, null);
