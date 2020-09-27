@@ -11,4 +11,7 @@ public class EncodedResult {
 		this.payloadPath = payloadPath;
 		this.outputPath = outputPath;
 	}
+	
+	
+	
 }

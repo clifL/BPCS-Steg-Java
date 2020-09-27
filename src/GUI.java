@@ -8,6 +8,8 @@ import javax.swing.UIManager;
 
 import BPCS.Extractor;
 import BPCS.Hider;
+import BPCS.PayloadFileProcessor;
+import BPCS.ExtractedPayload;
 import javax.swing.JSplitPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,17 +29,21 @@ import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GUI {
 
 	//Reference to encodedResult arraylist when doing view page or decode page. encodedResult contains all the past encoded result paths.
 	public ArrayList<EncodedResult> encodedResult = new ArrayList<EncodedResult>();
-	private String coverImagePath;
-	private String coverImageExtensionType;
-	private String secretFilePath;
-	private String saveAsPath;
+	public ArrayList<DecodedResult> decodeResult = new ArrayList<DecodedResult>();
+	private String coverImagePath; //p1
+	private String coverImageExtensionType; //jpg
+	private String secretFilePath; //p2	
+	private String saveAsPath;//p3
 	private JFrame frame;
-	private JTextField txtExtractorFilePath;
+	private JTextField txtDecodePathFile;
+	
+	private String DecrptFilePath; 
 
 	/**
 	 * Launch the application.
@@ -217,16 +223,6 @@ public class GUI {
 		btnGenerate.setBounds(0, 590, 497, 46);
 		panel.add(btnGenerate);
 		
-		
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Decode", null, panel_1, null);
-		panel_1.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(126, 58, 46, 14);
-		panel_1.add(lblNewLabel);
-		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Result", null, panel_2, null);
 		panel_2.setLayout(null);
@@ -235,64 +231,106 @@ public class GUI {
 		lblNewLabel_1.setBounds(171, 52, 46, 14);
 		panel_2.add(lblNewLabel_1);
 		
-		JPanel panel_decrypt = new JPanel();
-		tabbedPane.addTab("Decode", null, panel_decrypt, null);
-		panel_decrypt.setLayout(null);
+		JPanel panel_decode = new JPanel();
+		tabbedPane.addTab("Decode", null, panel_decode, null);
+		panel_decode.setLayout(null);
 		
 		JLabel LabelTitle = new JLabel("Decryption ");
 		LabelTitle.setBounds(25, 10, 120, 42);
-		panel_decrypt.add(LabelTitle);
+		panel_decode.add(LabelTitle);
 		
-		txtExtractorFilePath = new JTextField();
-		txtExtractorFilePath.setText("No file chosen");
-		txtExtractorFilePath.setColumns(10);
-		txtExtractorFilePath.setBounds(25, 62, 359, 20);
-		panel_decrypt.add(txtExtractorFilePath);
+		txtDecodePathFile = new JTextField();
+		txtDecodePathFile.setText("No file chosen");
+		txtDecodePathFile.setColumns(10);
+		txtDecodePathFile.setBounds(25, 62, 359, 20);
+		panel_decode.add(txtDecodePathFile);
 		
-		JButton btnChooseExtractorPic = new JButton("Choose File");
-		btnChooseExtractorPic.addActionListener(new ActionListener() {
+		
+		
+		JLabel OriginalPicPreview = new JLabel("Original Preview");
+		OriginalPicPreview.setOpaque(true);
+		OriginalPicPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		OriginalPicPreview.setForeground(Color.WHITE);
+		OriginalPicPreview.setBackground(Color.LIGHT_GRAY);
+		OriginalPicPreview.setBounds(502, 94, 472, 486);
+		panel_decode.add(OriginalPicPreview);
+		
+		JButton btnDecode = new JButton("Decrypt ");
+		btnDecode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if ((DecrptFilePath == "") || (DecrptFilePath == null))
+				{
+					JOptionPane.showMessageDialog(null, "Please input a Decrypt image!", "Missing input", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			
 				
-				secretFilePath = HelperFunctions.SelectFile();
-				txtSecretFilePath.setText(secretFilePath);
-				ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage().getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
-				coverImage.setIcon(img);
-			}
-		});
-		btnChooseExtractorPic.setBounds(406, 61, 103, 23);
-		panel_decrypt.add(btnChooseExtractorPic);
+				
+				{
+				
+					Path p1 = Paths.get(DecrptFilePath);
+					Path outputOfExtract = Paths.get("");
+					
+					//  public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{     
+					try {
+						List<Path> listOfOutputs = Extractor.ExtractPayload(p1,outputOfExtract );
+						decodeResult.add(new DecodedResult(p1,outputOfExtract ));
+						JOptionPane.showMessageDialog(null, "Operation Success", "Completed", JOptionPane.INFORMATION_MESSAGE);
+						//btnClear.doClick();
+	
+						for(int i =  0; i < listOfOutputs.size(); i++) {
+							System.out.println("The image name is " + listOfOutputs.get(i).toString());
+							System.out.println("So the path of the hidden image is: " +  listOfOutputs.get(i).toAbsolutePath().toString());
+						}
+						
+						DecrptFilePath = listOfOutputs.get(0).toAbsolutePath().toString();
 		
-		JLabel OriginalPic = new JLabel("Cover Preview");
-		OriginalPic.setOpaque(true);
-		OriginalPic.setHorizontalAlignment(SwingConstants.CENTER);
-		OriginalPic.setForeground(Color.WHITE);
-		OriginalPic.setBackground(Color.LIGHT_GRAY);
-		OriginalPic.setBounds(502, 94, 472, 486);
-		panel_decrypt.add(OriginalPic);
-		
-		JButton btnDecrypt = new JButton("Decrypt ");
-		btnDecrypt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+						txtDecodePathFile.setText(DecrptFilePath);
+						ImageIcon img = new ImageIcon(new ImageIcon(DecrptFilePath).getImage().getScaledInstance(OriginalPicPreview.getWidth(), OriginalPicPreview.getHeight(), Image.SCALE_SMOOTH));
+						OriginalPicPreview.setIcon(img);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				
+				
 				
 			}
+			
 		});
-		btnDecrypt.setForeground(Color.DARK_GRAY);
-		btnDecrypt.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnDecrypt.setBounds(48, 588, 193, 33);
-		panel_decrypt.add(btnDecrypt);
+		btnDecode.setForeground(Color.DARK_GRAY);
+		btnDecode.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnDecode.setBounds(48, 588, 193, 33);
+		panel_decode.add(btnDecode);
 		
 		JButton btnClear_1 = new JButton("Clear");
 		btnClear_1.setForeground(Color.DARK_GRAY);
 		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnClear_1.setBounds(270, 588, 199, 33);
-		panel_decrypt.add(btnClear_1);
+		panel_decode.add(btnClear_1);
 		
-		JLabel ExtractPic_1 = new JLabel("Cover Preview");
-		ExtractPic_1.setOpaque(true);
-		ExtractPic_1.setHorizontalAlignment(SwingConstants.CENTER);
-		ExtractPic_1.setForeground(Color.WHITE);
-		ExtractPic_1.setBackground(Color.LIGHT_GRAY);
-		ExtractPic_1.setBounds(20, 94, 472, 486);
-		panel_decrypt.add(ExtractPic_1);
+		JLabel DecodePicPreview = new JLabel("Decode Preview");
+		DecodePicPreview.setOpaque(true);
+		DecodePicPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		DecodePicPreview.setForeground(Color.WHITE);
+		DecodePicPreview.setBackground(Color.LIGHT_GRAY);
+		DecodePicPreview.setBounds(20, 94, 472, 486);
+		panel_decode.add(DecodePicPreview);
+		
+		JButton btnDecodePic = new JButton("Choose File");
+		btnDecodePic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				DecrptFilePath = HelperFunctions.SelectFile();
+				txtDecodePathFile.setText(DecrptFilePath);
+				ImageIcon img = new ImageIcon(new ImageIcon(DecrptFilePath).getImage().getScaledInstance(DecodePicPreview.getWidth(), DecodePicPreview.getHeight(), Image.SCALE_SMOOTH));
+				DecodePicPreview.setIcon(img);
+			}
+		});
+		btnDecodePic.setBounds(406, 61, 103, 23);
+		panel_decode.add(btnDecodePic);
 	}
 }
