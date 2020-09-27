@@ -173,5 +173,65 @@ public class GUI {
 		JLabel lblNewLabel_1 = new JLabel("New label");
 		lblNewLabel_1.setBounds(171, 52, 46, 14);
 		panel_2.add(lblNewLabel_1);
+		
+		JPanel panel_decrypt = new JPanel();
+		tabbedPane.addTab("Decode", null, panel_decrypt, null);
+		panel_decrypt.setLayout(null);
+		
+		JLabel LabelTitle = new JLabel("Decryption ");
+		LabelTitle.setBounds(25, 10, 120, 42);
+		panel_decrypt.add(LabelTitle);
+		
+		txtExtractorFilePath = new JTextField();
+		txtExtractorFilePath.setText("No file chosen");
+		txtExtractorFilePath.setColumns(10);
+		txtExtractorFilePath.setBounds(25, 62, 359, 20);
+		panel_decrypt.add(txtExtractorFilePath);
+		
+		JButton btnChooseExtractorPic = new JButton("Choose File");
+		btnChooseExtractorPic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				secretFilePath = HelperFunctions.SelectFile();
+				txtSecretFilePath.setText(secretFilePath);
+				ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage().getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
+				coverImage.setIcon(img);
+			}
+		});
+		btnChooseExtractorPic.setBounds(406, 61, 103, 23);
+		panel_decrypt.add(btnChooseExtractorPic);
+		
+		JLabel OriginalPic = new JLabel("Cover Preview");
+		OriginalPic.setOpaque(true);
+		OriginalPic.setHorizontalAlignment(SwingConstants.CENTER);
+		OriginalPic.setForeground(Color.WHITE);
+		OriginalPic.setBackground(Color.LIGHT_GRAY);
+		OriginalPic.setBounds(502, 94, 472, 486);
+		panel_decrypt.add(OriginalPic);
+		
+		JButton btnDecrypt = new JButton("Decrypt ");
+		btnDecrypt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnDecrypt.setForeground(Color.DARK_GRAY);
+		btnDecrypt.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnDecrypt.setBounds(48, 588, 193, 33);
+		panel_decrypt.add(btnDecrypt);
+		
+		JButton btnClear_1 = new JButton("Clear");
+		btnClear_1.setForeground(Color.DARK_GRAY);
+		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnClear_1.setBounds(270, 588, 199, 33);
+		panel_decrypt.add(btnClear_1);
+		
+		JLabel ExtractPic_1 = new JLabel("Cover Preview");
+		ExtractPic_1.setOpaque(true);
+		ExtractPic_1.setHorizontalAlignment(SwingConstants.CENTER);
+		ExtractPic_1.setForeground(Color.WHITE);
+		ExtractPic_1.setBackground(Color.LIGHT_GRAY);
+		ExtractPic_1.setBounds(20, 94, 472, 486);
+		panel_decrypt.add(ExtractPic_1);
 	}
 }
