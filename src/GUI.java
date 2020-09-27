@@ -10,11 +10,14 @@ import BPCS.Extractor;
 import BPCS.Hider;
 import BPCS.PayloadFileProcessor;
 import BPCS.ExtractedPayload;
+// import sun.java2d.opengl.OGLDrawImage;
+
 import javax.swing.JSplitPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,9 +34,11 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class GUI {
 
-	//Reference to encodedResult arraylist when doing view page or decode page. encodedResult contains all the past encoded result paths.
+	// Reference to encodedResult arraylist when doing view page or decode page.
+	// encodedResult contains all the past encoded result paths.
 	public ArrayList<EncodedResult> encodedResult = new ArrayList<EncodedResult>();
 	public ArrayList<DecodedResult> decodeResult = new ArrayList<DecodedResult>();
 	private String coverImagePath; //p1
@@ -44,23 +49,28 @@ public class GUI {
 	private JTextField txtDecodePathFile;
 	
 	private String DecrptFilePath; 
+	private JTextField txtExtractorFilePath;
+	private JPanel panelEncodeResults;
+	private JTabbedPane tabbedPane;
+	private JLabel encodeResultsCoverPreview;
+	private JLabel encodeResultsStegoedPreview;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI window = new GUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	// public static void main(String[] args) {
+
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// GUI window = new GUI();
+	// window.frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the application.
@@ -73,89 +83,91 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		panelEncodeResults = new JPanel();
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1024, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		UIManager.put("TabbedPane.selected", new java.awt.Color(235, 184, 0));
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setForeground(Color.WHITE);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setForeground(Color.BLACK);
 		tabbedPane.setBackground(new java.awt.Color(41, 57, 86));
 		tabbedPane.setBounds(0, 0, 1008, 675);
 		frame.getContentPane().add(tabbedPane);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(112, 128, 144));
-		tabbedPane.addTab("Encode", null, panel, null);
-		panel.setLayout(null);
-		
+
+		JPanel panelEncode = new JPanel();
+		panelEncode.setBackground(new Color(112, 128, 144));
+		tabbedPane.addTab("Encode", null, panelEncode, null);
+		panelEncode.setLayout(null);
+
 		JLabel lblCoverImage = new JLabel("Upload Cover Image");
 		lblCoverImage.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblCoverImage.setForeground(new Color(255, 255, 255));
 		lblCoverImage.setBounds(10, 24, 164, 14);
-		panel.add(lblCoverImage);
-		
+		panelEncode.add(lblCoverImage);
+
 		JTextField txtCoverFilePath = new JTextField();
 		txtCoverFilePath.setText("No file chosen");
 		txtCoverFilePath.setColumns(10);
 		txtCoverFilePath.setBounds(10, 49, 359, 20);
-		panel.add(txtCoverFilePath);
-		
+		panelEncode.add(txtCoverFilePath);
+
 		JLabel coverImage = new JLabel("Cover Preview");
 		coverImage.setOpaque(true);
 		coverImage.setHorizontalAlignment(SwingConstants.CENTER);
 		coverImage.setForeground(Color.WHITE);
 		coverImage.setBackground(Color.LIGHT_GRAY);
 		coverImage.setBounds(10, 80, 472, 486);
-		panel.add(coverImage);
-		
+		panelEncode.add(coverImage);
+
 		JButton btnChooseCover = new JButton("Choose File");
 		btnChooseCover.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coverImagePath = HelperFunctions.SelectFile();
 				coverImageExtensionType = HelperFunctions.GetFileExtension(coverImagePath);
 				txtCoverFilePath.setText(coverImagePath);
-				ImageIcon img = new ImageIcon(new ImageIcon(coverImagePath).getImage().getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
+				ImageIcon img = new ImageIcon(new ImageIcon(coverImagePath).getImage()
+						.getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
 				coverImage.setIcon(img);
 			}
 		});
 		btnChooseCover.setBounds(379, 48, 103, 23);
-		panel.add(btnChooseCover);
-		
-		
-		
+		panelEncode.add(btnChooseCover);
+
 		JLabel lblSecretFile = new JLabel("Upload Secret File");
 		lblSecretFile.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblSecretFile.setForeground(new Color(255, 255, 255));
 		lblSecretFile.setBounds(510, 24, 164, 14);
-		panel.add(lblSecretFile);
-		
+		panelEncode.add(lblSecretFile);
+
 		JTextField txtSecretFilePath = new JTextField();
 		txtSecretFilePath.setColumns(10);
 		txtSecretFilePath.setBounds(509, 49, 371, 20);
-		panel.add(txtSecretFilePath);
-		
+		panelEncode.add(txtSecretFilePath);
+
 		JLabel secretImage = new JLabel("Secret Preview (If applicable)");
 		secretImage.setOpaque(true);
 		secretImage.setHorizontalAlignment(SwingConstants.CENTER);
 		secretImage.setForeground(Color.WHITE);
 		secretImage.setBackground(Color.LIGHT_GRAY);
 		secretImage.setBounds(509, 80, 484, 486);
-		panel.add(secretImage);
-		
+		panelEncode.add(secretImage);
+
 		JButton btnChooseSecret = new JButton("Choose File");
 		btnChooseSecret.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				secretFilePath = HelperFunctions.SelectFile();
 				txtSecretFilePath.setText(secretFilePath);
-				ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage().getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
+				ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage()
+						.getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
 				secretImage.setIcon(img);
 			}
 		});
 		btnChooseSecret.setBounds(890, 48, 103, 23);
-		panel.add(btnChooseSecret);
-		
+		panelEncode.add(btnChooseSecret);
+
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,63 +185,95 @@ public class GUI {
 		btnClear.setForeground(Color.DARK_GRAY);
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnClear.setBounds(497, 590, 506, 46);
-		panel.add(btnClear);
-		
+		panelEncode.add(btnClear);
+
 		JButton btnGenerate = new JButton("Generate");
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Validation
-				if ((coverImagePath == "") || (coverImagePath == null))
-				{
-					JOptionPane.showMessageDialog(null, "Please input a cover image!", "Missing input", JOptionPane.INFORMATION_MESSAGE);
+				// Validation
+				if ((coverImagePath == "") || (coverImagePath == null)) {
+					JOptionPane.showMessageDialog(null, "Please input a cover image!", "Missing input",
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
-				}
-				else if((secretFilePath == "") || (secretFilePath == null))
-				{
-					JOptionPane.showMessageDialog(null, "Please input a secret file (payload)!", "Missing input", JOptionPane.INFORMATION_MESSAGE);
+				} else if ((secretFilePath == "") || (secretFilePath == null)) {
+					JOptionPane.showMessageDialog(null, "Please input a secret file (payload)!", "Missing input",
+							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				System.out.println(coverImageExtensionType);
-				saveAsPath = HelperFunctions.SaveFile(coverImageExtensionType); 
-				if (saveAsPath != "")
-				{
+				saveAsPath = HelperFunctions.SaveFile(coverImageExtensionType);
+				if (saveAsPath != "") {
 					saveAsPath = saveAsPath + "." + coverImageExtensionType;
 					Path p1 = Paths.get(coverImagePath);
 					Path p2 = Paths.get(secretFilePath);
 					Path p3 = Paths.get(saveAsPath);
-					//  public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{     
+					// public static void HidePayload(Path vesselPath, Path payloadPath, Path
+					// outputPath) throws Exception{
 					try {
 						Hider.HidePayload(p1, p2, p3);
 						encodedResult.add(new EncodedResult(p1, p2, p3));
-						JOptionPane.showMessageDialog(null, "Operation Success", "Completed", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Operation Success", "Completed",
+								JOptionPane.INFORMATION_MESSAGE);
 						btnClear.doClick();
-						
+
+						// trigger encode results
+						triggerEncodeResults(encodedResult);
+
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Operation cancelled", "Cancel",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
-				else 
-				{
-					JOptionPane.showMessageDialog(null, "Operation cancelled", "Cancel", JOptionPane.INFORMATION_MESSAGE);
-				}
-				
-				
+
 			}
 		});
 		btnGenerate.setForeground(Color.DARK_GRAY);
 		btnGenerate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnGenerate.setBounds(0, 590, 497, 46);
-		panel.add(btnGenerate);
+		panelEncode.add(btnGenerate);
+
+		panelEncodeResults.setEnabled(false);
+		tabbedPane.addTab("Encode Result", null, panelEncodeResults, null);
+		tabbedPane.setEnabledAt(tabbedPane.indexOfComponent(panelEncodeResults), false);
+		panelEncodeResults.setLayout(null);
+		panelEncodeResults.setBackground(new Color(112, 128, 144));
+
+		encodeResultsCoverPreview = new JLabel("Cover Preview");
+		encodeResultsCoverPreview.setOpaque(true);
+		encodeResultsCoverPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		encodeResultsCoverPreview.setForeground(Color.WHITE);
+		encodeResultsCoverPreview.setBackground(Color.LIGHT_GRAY);
+		encodeResultsCoverPreview.setBounds(10, 57, 472, 486);
+		panelEncodeResults.add(encodeResultsCoverPreview);
+
+		encodeResultsStegoedPreview = new JLabel("Secret Preview (If applicable)");
+		encodeResultsStegoedPreview.setOpaque(true);
+		encodeResultsStegoedPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		encodeResultsStegoedPreview.setForeground(Color.WHITE);
+		encodeResultsStegoedPreview.setBackground(Color.LIGHT_GRAY);
+		encodeResultsStegoedPreview.setBounds(509, 57, 484, 486);
+		panelEncodeResults.add(encodeResultsStegoedPreview);
+
+		JLabel lblEncodeResults1 = new JLabel("Cover Image");
+		lblEncodeResults1.setForeground(Color.WHITE);
+		lblEncodeResults1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEncodeResults1.setBounds(10, 32, 164, 14);
+		panelEncodeResults.add(lblEncodeResults1);
+
+		JLabel lblEncodeResults2 = new JLabel("Steganographed Image");
+		lblEncodeResults2.setForeground(Color.WHITE);
+		lblEncodeResults2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEncodeResults2.setBounds(511, 34, 164, 14);
+		panelEncodeResults.add(lblEncodeResults2);
+
+		JPanel panelDecodeResults = new JPanel();
+		tabbedPane.addTab("Decode Result", null, panelDecodeResults, null);
 		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("Result", null, panel_2, null);
-		panel_2.setLayout(null);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setBounds(171, 52, 46, 14);
-		panel_2.add(lblNewLabel_1);
 		
 		JPanel panel_decode = new JPanel();
 		tabbedPane.addTab("Decode", null, panel_decode, null);
@@ -332,5 +376,32 @@ public class GUI {
 		});
 		btnDecodePic.setBounds(406, 61, 103, 23);
 		panel_decode.add(btnDecodePic);
+	}
+
+
+	// roll ur own methods here
+	private void triggerEncodeResults(ArrayList<EncodedResult> encodedResult) throws MalformedURLException {
+		// grab encode result tab index
+		int panelEncodeResultsIndex = tabbedPane.indexOfComponent(panelEncodeResults);
+
+		// enable tab and switch to it
+		tabbedPane.setEnabledAt(panelEncodeResultsIndex, true);
+		tabbedPane.setSelectedIndex(panelEncodeResultsIndex);
+
+		// grab images from encodedresult and slap them into the labels
+		ImageIcon encodeResultsCoverImage = new ImageIcon(encodedResult.get(encodedResult.size()-1).vesselPath.toUri().toURL());
+		ImageIcon encodeResultsStegoedImage = new ImageIcon(encodedResult.get(encodedResult.size()-1).outputPath.toUri().toURL());
+		encodeResultsCoverPreview.setIcon(encodeResultsCoverImage);
+		encodeResultsStegoedPreview.setIcon(encodeResultsStegoedImage);
+	}
+
+	// roll ur own getter setters here
+
+	public void frameSetVisible(Boolean visible){
+		this.frame.setVisible(visible);
+	}
+
+	public JPanel getPanelEncodeResults() {
+		return panelEncodeResults;
 	}
 }
