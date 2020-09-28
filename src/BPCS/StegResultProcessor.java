@@ -3,7 +3,7 @@ package BPCS;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
+// import java.awt.Color;
 
 public class StegResultProcessor {
     private Pixel[][] pixels;
