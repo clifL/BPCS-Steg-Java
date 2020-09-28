@@ -40,8 +40,6 @@ public class PayloadFileProcessor {
         int contentStart = buildHeader(fileLength, fileName, byteFile); //simply modifies payload byteFile header
         fis.read(byteFile, contentStart, (int) payload.length());
 
-        fis.close();
-
         return byteFile;
     }
 

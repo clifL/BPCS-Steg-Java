@@ -1,31 +1,31 @@
-// import java.awt.EventQueue;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
-// import java.awt.BorderLayout;
+import java.awt.BorderLayout;
 import javax.swing.JPanel;
-// import javax.swing.JMenuBar;
+import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 import BPCS.Extractor;
 import BPCS.Hider;
-// import BPCS.PayloadFileProcessor;
-// import BPCS.ExtractedPayload;
+import BPCS.PayloadFileProcessor;
+import BPCS.ExtractedPayload;
 // import sun.java2d.opengl.OGLDrawImage;
 
-// import javax.swing.JSplitPane;
+import javax.swing.JSplitPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-// import java.io.File;
+import java.io.File;
 import java.net.MalformedURLException;
-// import java.nio.file.Files;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
-// import java.awt.CardLayout;
+import java.awt.CardLayout;
 import javax.swing.JLabel;
 import java.awt.Color;
-// import java.awt.SystemColor;
+import java.awt.SystemColor;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class GUI {
 
 	// Reference to encodedResult arraylist when doing view page or decode page.
@@ -48,7 +49,7 @@ public class GUI {
 	private JTextField txtDecodePathFile;
 	
 	private String DecrptFilePath; 
-	// private JTextField txtExtractorFilePath;
+	private JTextField txtExtractorFilePath;
 	private JPanel panelEncodeResults;
 	private JTabbedPane tabbedPane;
 	private JLabel encodeResultsCoverPreview;
@@ -95,10 +96,6 @@ public class GUI {
 		tabbedPane.setBackground(new java.awt.Color(41, 57, 86));
 		tabbedPane.setBounds(0, 0, 1008, 675);
 		frame.getContentPane().add(tabbedPane);
-
-
-		////////////////
-		// encode panel
 
 		JPanel panelEncode = new JPanel();
 		panelEncode.setBackground(new Color(112, 128, 144));
@@ -223,6 +220,7 @@ public class GUI {
 						triggerEncodeResults(encodedResult);
 
 					} catch (Exception e1) {
+						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -238,9 +236,6 @@ public class GUI {
 		btnGenerate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnGenerate.setBounds(0, 590, 497, 46);
 		panelEncode.add(btnGenerate);
-
-		////////////////////////
-		// encode result panel
 
 		panelEncodeResults.setEnabled(false);
 		tabbedPane.addTab("Encode Result", null, panelEncodeResults, null);
@@ -275,11 +270,11 @@ public class GUI {
 		lblEncodeResults2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblEncodeResults2.setBounds(511, 34, 164, 14);
 		panelEncodeResults.add(lblEncodeResults2);
-		
-		
-		////////////////
-		// decode panel
 
+		JPanel panelDecodeResults = new JPanel();
+		tabbedPane.addTab("Decode Result", null, panelDecodeResults, null);
+		
+		
 		JPanel panel_decode = new JPanel();
 		panel_decode.setForeground(new Color(0, 0, 0));
 		panel_decode.setBackground(Color.WHITE);
@@ -333,7 +328,7 @@ public class GUI {
 						OriginalPicPreview.setIcon(img);
 						
 					} catch (Exception e1) {
-						
+						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry", JOptionPane.INFORMATION_MESSAGE);
 					}

@@ -6,7 +6,7 @@ import java.nio.file.*;
 public class Hider {
     public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{        
 
-        // Scanner key = new Scanner(System.in);
+        Scanner key = new Scanner(System.in);
 
         System.out.print("Enter name of vessel image: ");
         
@@ -46,6 +46,6 @@ public class Hider {
 
         System.out.println("Result image generated!");
 
-        // key.close();
+        key.close();
     }
 }
