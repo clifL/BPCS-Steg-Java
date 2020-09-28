@@ -281,26 +281,23 @@ public class GUI {
 		// decode panel
 
 		JPanel panel_decode = new JPanel();
+		panel_decode.setForeground(new Color(0, 0, 0));
+		panel_decode.setBackground(Color.WHITE);
 		tabbedPane.addTab("Decode", null, panel_decode, null);
 		panel_decode.setLayout(null);
-		
-		JLabel LabelTitle = new JLabel("Decryption ");
-		LabelTitle.setBounds(25, 10, 120, 42);
-		panel_decode.add(LabelTitle);
 		
 		txtDecodePathFile = new JTextField();
 		txtDecodePathFile.setText("No file chosen");
 		txtDecodePathFile.setColumns(10);
-		txtDecodePathFile.setBounds(25, 62, 359, 20);
+		txtDecodePathFile.setBounds(20, 50, 371, 23);
 		panel_decode.add(txtDecodePathFile);
 		
 		
-		
-		JLabel OriginalPicPreview = new JLabel("Original Preview");
+		JLabel OriginalPicPreview = new JLabel("Playload(Secret) Image");
 		OriginalPicPreview.setOpaque(true);
 		OriginalPicPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		OriginalPicPreview.setForeground(Color.WHITE);
-		OriginalPicPreview.setBackground(Color.LIGHT_GRAY);
+		OriginalPicPreview.setBackground(SystemColor.activeCaption);
 		OriginalPicPreview.setBounds(502, 94, 472, 486);
 		panel_decode.add(OriginalPicPreview);
 		
@@ -313,19 +310,16 @@ public class GUI {
 					return;
 				}
 			
-				
-				
 				{
 				
 					Path p1 = Paths.get(DecrptFilePath);
 					Path outputOfExtract = Paths.get("");
-					
-					//  public static void HidePayload(Path vesselPath, Path payloadPath, Path outputPath) throws Exception{     
+					    
 					try {
 						List<Path> listOfOutputs = Extractor.ExtractPayload(p1,outputOfExtract );
 						decodeResult.add(new DecodedResult(p1,outputOfExtract ));
 						JOptionPane.showMessageDialog(null, "Operation Success", "Completed", JOptionPane.INFORMATION_MESSAGE);
-						//btnClear.doClick();
+						btnClear.doClick();
 	
 						for(int i =  0; i < listOfOutputs.size(); i++) {
 							System.out.println("The image name is " + listOfOutputs.get(i).toString());
@@ -350,22 +344,18 @@ public class GUI {
 			}
 			
 		});
-		btnDecode.setForeground(Color.DARK_GRAY);
+		btnDecode.setContentAreaFilled(false);
+		btnDecode.setFocusPainted(false);
 		btnDecode.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnDecode.setBounds(48, 588, 193, 33);
 		panel_decode.add(btnDecode);
 		
-		JButton btnClear_1 = new JButton("Clear");
-		btnClear_1.setForeground(Color.DARK_GRAY);
-		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnClear_1.setBounds(270, 588, 199, 33);
-		panel_decode.add(btnClear_1);
-		
-		JLabel DecodePicPreview = new JLabel("Decode Preview");
+	
+		JLabel DecodePicPreview = new JLabel("Encoded Image");
 		DecodePicPreview.setOpaque(true);
 		DecodePicPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		DecodePicPreview.setForeground(Color.WHITE);
-		DecodePicPreview.setBackground(Color.LIGHT_GRAY);
+		DecodePicPreview.setBackground(SystemColor.activeCaption);
 		DecodePicPreview.setBounds(20, 94, 472, 486);
 		panel_decode.add(DecodePicPreview);
 		
@@ -379,8 +369,34 @@ public class GUI {
 				DecodePicPreview.setIcon(img);
 			}
 		});
-		btnDecodePic.setBounds(406, 61, 103, 23);
+		btnDecodePic.setBounds(412, 50, 103, 23);
 		panel_decode.add(btnDecodePic);
+		
+		JButton btnClear_1 = new JButton("Clear");
+		btnClear_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DecrptFilePath = "";
+				OriginalPicPreview.setIcon(null);
+				DecodePicPreview.setIcon(null);
+				txtDecodePathFile.setText("No file chosen");
+			}
+		});
+		btnClear_1.setContentAreaFilled(false);
+		btnClear_1.setFocusPainted(false);
+		btnClear_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnClear_1.setBounds(271, 588, 199, 33);
+		panel_decode.add(btnClear_1);
+		
+		JLabel lblUpload = new JLabel("Upload Encode Image");
+		lblUpload.setForeground(Color.WHITE);
+		lblUpload.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblUpload.setBounds(20, 26, 164, 14);
+		panel_decode.add(lblUpload);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Nilia\\OneDrive\\Pictures\\photo-1508796079212-a4b83cbf734d.jpg"));
+		lblNewLabel.setBounds(0, 0, 1003, 638);
+		panel_decode.add(lblNewLabel);
 	}
 
 
