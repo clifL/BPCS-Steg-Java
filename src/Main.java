@@ -1,11 +1,5 @@
-import BPCS.Hider;
-import BPCS.Extractor;
-
-
-import java.util.*;
 import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.*;
 
 public class Main {
     static GUI gui = null;

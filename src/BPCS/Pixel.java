@@ -1,7 +1,5 @@
 package BPCS;
 
-import java.awt.Color;
-
 public class Pixel {
     private int alpha, bpcRed, cgcRed, bpcGreen, cgcGreen, bpcBlue, cgcBlue;
     private int[] cgcBits, alphaBits; //from lsb to msb, from blue to red

@@ -7,7 +7,6 @@ import java.nio.file.*;
 
 public class FileFinder {
     private int[] bitForm;
-    private List<Character> text;
 
     public FileFinder(List<Segment> segments) { //if type == true, then will read as text
         bitForm = new int[segments.size() * 63];

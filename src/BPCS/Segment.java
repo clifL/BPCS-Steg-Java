@@ -1,7 +1,5 @@
 package BPCS;
 
-import java.util.*;
-
 public class Segment implements Chunk {
     private int row, col, layer;
     private int[][] pl; //simply stores reference

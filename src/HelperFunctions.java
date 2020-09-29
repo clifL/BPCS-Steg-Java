@@ -2,8 +2,6 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;   
-import java.util.Scanner;
-import java.io.IOException;
 
 public class HelperFunctions {
 	

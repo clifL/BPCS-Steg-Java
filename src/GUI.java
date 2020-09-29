@@ -1,28 +1,18 @@
-import java.awt.EventQueue;
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 import BPCS.Extractor;
 import BPCS.Hider;
-import BPCS.PayloadFileProcessor;
-import BPCS.ExtractedPayload;
-// import sun.java2d.opengl.OGLDrawImage;
 
-import javax.swing.JSplitPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
-import java.awt.CardLayout;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.SystemColor;
@@ -34,7 +24,6 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class GUI {
 
 	// Reference to encodedResult arraylist when doing view page or decode page.
@@ -49,28 +38,10 @@ public class GUI {
 	private JTextField txtDecodePathFile;
 	
 	private String DecrptFilePath; 
-	private JTextField txtExtractorFilePath;
 	private JPanel panelEncodeResults;
 	private JTabbedPane tabbedPane;
 	private JLabel encodeResultsCoverPreview;
 	private JLabel encodeResultsStegoedPreview;
-
-	/**
-	 * Launch the application.
-	 */
-	// public static void main(String[] args) {
-
-	// EventQueue.invokeLater(new Runnable() {
-	// public void run() {
-	// try {
-	// GUI window = new GUI();
-	// window.frame.setVisible(true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// }
 
 	/**
 	 * Create the application.
@@ -270,9 +241,6 @@ public class GUI {
 		lblEncodeResults2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblEncodeResults2.setBounds(511, 34, 164, 14);
 		panelEncodeResults.add(lblEncodeResults2);
-
-		JPanel panelDecodeResults = new JPanel();
-		tabbedPane.addTab("Decode Result", null, panelDecodeResults, null);
 		
 		
 		JPanel panel_decode = new JPanel();
