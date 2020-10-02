@@ -97,7 +97,8 @@ public class GUI {
 		panelEncodeResults = new JPanel();
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1024, 700);
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 1004, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -105,24 +106,26 @@ public class GUI {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.BLACK);
 		tabbedPane.setBackground(new java.awt.Color(41, 57, 86));
-		tabbedPane.setBounds(0, 0, 1008, 675);
+		tabbedPane.setBounds(0, 0, 998, 675);
 		frame.getContentPane().add(tabbedPane);
 
 		JPanel panelEncode = new JPanel();
+		panelEncode.setForeground(Color.WHITE);
 		panelEncode.setBackground(new Color(112, 128, 144));
 		tabbedPane.addTab("Encode", null, panelEncode, null);
 		panelEncode.setLayout(null);
 
 		JLabel lblCoverImage = new JLabel("Upload Cover Image");
-		lblCoverImage.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCoverImage.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
 		lblCoverImage.setForeground(new Color(255, 255, 255));
-		lblCoverImage.setBounds(10, 24, 164, 14);
+		lblCoverImage.setBounds(10, 24, 164, 20);
 		panelEncode.add(lblCoverImage);
 
 		JTextField txtCoverFilePath = new JTextField();
-		txtCoverFilePath.setText("No file chosen");
+		txtCoverFilePath.setEditable(false);
+		txtCoverFilePath.setText("No File Chosen");
 		txtCoverFilePath.setColumns(10);
-		txtCoverFilePath.setBounds(10, 49, 359, 20);
+		txtCoverFilePath.setBounds(10, 49, 371, 20);
 		panelEncode.add(txtCoverFilePath);
 
 		JLabel coverImage = new JLabel("Cover Preview");
@@ -130,7 +133,7 @@ public class GUI {
 		coverImage.setHorizontalAlignment(SwingConstants.CENTER);
 		coverImage.setForeground(Color.WHITE);
 		coverImage.setBackground(Color.LIGHT_GRAY);
-		coverImage.setBounds(10, 80, 472, 486);
+		coverImage.setBounds(6, 80, 472, 486);
 		panelEncode.add(coverImage);
 
 		JButton btnChooseCover = new JButton("Choose File");
@@ -148,14 +151,16 @@ public class GUI {
 		panelEncode.add(btnChooseCover);
 
 		JLabel lblSecretFile = new JLabel("Upload Secret File");
-		lblSecretFile.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSecretFile.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
 		lblSecretFile.setForeground(new Color(255, 255, 255));
-		lblSecretFile.setBounds(510, 24, 164, 14);
+		lblSecretFile.setBounds(494, 24, 164, 20);
 		panelEncode.add(lblSecretFile);
 
 		JTextField txtSecretFilePath = new JTextField();
+		txtSecretFilePath.setEditable(false);
+		txtSecretFilePath.setText("No File Chosen");
 		txtSecretFilePath.setColumns(10);
-		txtSecretFilePath.setBounds(509, 49, 371, 20);
+		txtSecretFilePath.setBounds(494, 49, 377, 20);
 		panelEncode.add(txtSecretFilePath);
 
 		JLabel secretImage = new JLabel("Secret Preview (If applicable)");
@@ -163,7 +168,7 @@ public class GUI {
 		secretImage.setHorizontalAlignment(SwingConstants.CENTER);
 		secretImage.setForeground(Color.WHITE);
 		secretImage.setBackground(Color.LIGHT_GRAY);
-		secretImage.setBounds(509, 80, 484, 486);
+		secretImage.setBounds(487, 80, 484, 486);
 		panelEncode.add(secretImage);
 
 		JButton btnChooseSecret = new JButton("Choose File");
@@ -176,10 +181,11 @@ public class GUI {
 				secretImage.setIcon(img);
 			}
 		});
-		btnChooseSecret.setBounds(890, 48, 103, 23);
+		btnChooseSecret.setBounds(875, 49, 103, 23);
 		panelEncode.add(btnChooseSecret);
 
 		JButton btnClear = new JButton("Clear");
+		btnClear.setBackground(Color.DARK_GRAY);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				coverImagePath = "";
@@ -193,12 +199,13 @@ public class GUI {
 
 			}
 		});
-		btnClear.setForeground(Color.DARK_GRAY);
+		btnClear.setForeground(Color.BLACK);
 		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnClear.setBounds(497, 590, 506, 46);
+		btnClear.setBounds(483, 577, 488, 46);
 		panelEncode.add(btnClear);
 
-		JButton btnGenerate = new JButton("Generate");
+		JButton btnGenerate = new JButton("Generate!");
+		btnGenerate.setBackground(Color.WHITE);
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Validation
@@ -243,9 +250,9 @@ public class GUI {
 
 			}
 		});
-		btnGenerate.setForeground(Color.DARK_GRAY);
+		btnGenerate.setForeground(Color.BLACK);
 		btnGenerate.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnGenerate.setBounds(0, 590, 497, 46);
+		btnGenerate.setBounds(6, 577, 476, 46);
 		panelEncode.add(btnGenerate);
 
 		panelEncodeResults.setEnabled(false);
@@ -259,7 +266,7 @@ public class GUI {
 		encodeResultsCoverPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		encodeResultsCoverPreview.setForeground(Color.WHITE);
 		encodeResultsCoverPreview.setBackground(Color.LIGHT_GRAY);
-		encodeResultsCoverPreview.setBounds(10, 57, 472, 486);
+		encodeResultsCoverPreview.setBounds(3, 57, 472, 566);
 		panelEncodeResults.add(encodeResultsCoverPreview);
 
 		encodeResultsStegoedPreview = new JLabel("Secret Preview (If applicable)");
@@ -267,29 +274,30 @@ public class GUI {
 		encodeResultsStegoedPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		encodeResultsStegoedPreview.setForeground(Color.WHITE);
 		encodeResultsStegoedPreview.setBackground(Color.LIGHT_GRAY);
-		encodeResultsStegoedPreview.setBounds(509, 57, 484, 486);
+		encodeResultsStegoedPreview.setBounds(487, 57, 484, 566);
 		panelEncodeResults.add(encodeResultsStegoedPreview);
 
 		JLabel lblEncodeResults1 = new JLabel("Cover Image");
 		lblEncodeResults1.setForeground(Color.WHITE);
-		lblEncodeResults1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEncodeResults1.setBounds(10, 32, 164, 14);
+		lblEncodeResults1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
+		lblEncodeResults1.setBounds(10, 32, 164, 19);
 		panelEncodeResults.add(lblEncodeResults1);
 
 		JLabel lblEncodeResults2 = new JLabel("Steganographed Image");
 		lblEncodeResults2.setForeground(Color.WHITE);
-		lblEncodeResults2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEncodeResults2.setBounds(511, 34, 164, 14);
+		lblEncodeResults2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
+		lblEncodeResults2.setBounds(494, 28, 211, 23);
 		panelEncodeResults.add(lblEncodeResults2);
 		
 		
 		JPanel panel_decode = new JPanel();
 		panel_decode.setForeground(new Color(0, 0, 0));
-		panel_decode.setBackground(Color.WHITE);
+		panel_decode.setBackground(new Color(112, 128, 144));
 		tabbedPane.addTab("Decode", null, panel_decode, null);
 		panel_decode.setLayout(null);
 		
 		txtDecodePathFile = new JTextField();
+		txtDecodePathFile.setEditable(false);
 		txtDecodePathFile.setText("No file chosen");
 		txtDecodePathFile.setColumns(10);
 		txtDecodePathFile.setBounds(20, 50, 371, 23);
@@ -447,7 +455,7 @@ public class GUI {
 				DecodePicPreview.setIcon(img);
 			}
 		});
-		btnDecodePic.setBounds(412, 50, 103, 23);
+		btnDecodePic.setBounds(403, 52, 103, 23);
 		panel_decode.add(btnDecodePic);
 		
 		JButton btnClear_1 = new JButton("Clear");
@@ -469,13 +477,15 @@ public class GUI {
 		
 		JLabel lblUpload = new JLabel("Upload Encode Image");
 		lblUpload.setForeground(Color.WHITE);
-		lblUpload.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUpload.setBounds(20, 26, 164, 14);
+		lblUpload.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
+		lblUpload.setBounds(20, 15, 164, 23);
 		panel_decode.add(lblUpload);
 		
 		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setForeground(new Color(112, 128, 144));
+		lblNewLabel.setBackground(new Color(112, 128, 144));
 		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Nilia\\OneDrive\\Pictures\\photo-1508796079212-a4b83cbf734d.jpg"));
-		lblNewLabel.setBounds(0, 11, 1003, 638);
+		lblNewLabel.setBounds(0, 11, 981, 638);
 		panel_decode.add(lblNewLabel);
 	}
 
