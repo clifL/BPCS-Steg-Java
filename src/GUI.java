@@ -1,48 +1,32 @@
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
-
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JMenuBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
-
-import BPCS.Extractor;
-import BPCS.Hider;
-import BPCS.PayloadFileProcessor;
-import BPCS.ExtractedPayload;
-// import sun.java2d.opengl.OGLDrawImage;
-
-import javax.swing.JSplitPane;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.CardLayout;
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.SystemColor;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
+import BPCS.Extractor;
+import BPCS.Hider;
 
-
-@SuppressWarnings("serial")
 public class GUI {
 
 	// Reference to encodedResult arraylist when doing view page or decode page.
@@ -57,32 +41,11 @@ public class GUI {
 	private JTextField txtDecodePathFile;
 	
 	private String DecrptFilePath; 
-	private JTextField txtExtractorFilePath;
 	private JPanel panelEncodeResults;
 	private JTabbedPane tabbedPane;
 	private JLabel encodeResultsCoverPreview;
 	private JLabel encodeResultsStegoedPreview;
 	
-	private int decodedID = 0;
-	
-
-	/**
-	 * Launch the application.
-	 */
-	// public static void main(String[] args) {
-
-	// EventQueue.invokeLater(new Runnable() {
-	// public void run() {
-	// try {
-	// GUI window = new GUI();
-	// window.frame.setVisible(true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// }
-
 	/**
 	 * Create the application.
 	 */
@@ -225,8 +188,7 @@ public class GUI {
 					Path p1 = Paths.get(coverImagePath);
 					Path p2 = Paths.get(secretFilePath);
 					Path p3 = Paths.get(saveAsPath);
-					// public static void HidePayload(Path vesselPath, Path payloadPath, Path
-					// outputPath) throws Exception{
+
 					try {
 						Hider.HidePayload(p1, p2, p3);
 						encodedResult.add(new EncodedResult(p1, p2, p3));
@@ -238,7 +200,6 @@ public class GUI {
 						triggerEncodeResults(encodedResult);
 
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -303,16 +264,6 @@ public class GUI {
 		txtDecodePathFile.setBounds(20, 50, 371, 23);
 		panel_decode.add(txtDecodePathFile);
 		
-		/* Original decoded image code
-		JLabel OriginalPicPreview = new JLabel("Playload(Secret) Image");
-		OriginalPicPreview.setOpaque(true);
-		OriginalPicPreview.setHorizontalAlignment(SwingConstants.CENTER);
-		OriginalPicPreview.setForeground(Color.WHITE);
-		OriginalPicPreview.setBackground(SystemColor.activeCaption);
-		OriginalPicPreview.setBounds(502, 94, 472, 486);
-		panel_decode.add(OriginalPicPreview);
-		*/
-		
 		//Declaring textarea and label object
 		JTextArea decodedTextArea = new JTextArea();
 		JLabel OriginalPicPreview = new JLabel("Playload(Secret) Image");
@@ -348,9 +299,6 @@ public class GUI {
 		
 						txtDecodePathFile.setText(DecrptFilePath);
 						
-						//ImageIcon img = new ImageIcon(new ImageIcon(DecrptFilePath).getImage().getScaledInstance(OriginalPicPreview.getWidth(), OriginalPicPreview.getHeight(), Image.SCALE_SMOOTH));
-						//OriginalPicPreview.setIcon(img);
-						
 						//Getting decrypted file path
 						String filePathCheckImage = DecrptFilePath.toString();
 						Image fileIsImage = ImageIO.read(new File(filePathCheckImage));
@@ -358,10 +306,7 @@ public class GUI {
 
 						//If check that its no image, use the textarea then push it to the panel
 						if (fileIsImage == null) {
-							
-							
 							decodedTextArea.setEditable(false);
-							//decodedTextArea.setBackground(SystemColor.activeCaption);
 							decodedTextArea.setBounds(502, 94, 472, 486);
 							decodedTextArea.setForeground(Color.BLACK);
 							decodedTextArea.setLineWrap(true);
@@ -377,15 +322,10 @@ public class GUI {
 								decodedTextArea.append(line + System.lineSeparator());
 							}
 							
-		
-//							OriginalPicPreview.setText(formedText);
-//							ImageIcon img = new ImageIcon(new ImageIcon(DecrptFilePath).getImage().getScaledInstance(OriginalPicPreview.getWidth(), OriginalPicPreview.getHeight(), Image.SCALE_SMOOTH));
-//							OriginalPicPreview.setIcon(img);
+							br.close();
 						}
-						
-						//File is an image
-						else { 
 
+						else {
 							OriginalPicPreview.setOpaque(true);
 							OriginalPicPreview.setHorizontalAlignment(SwingConstants.CENTER);
 							OriginalPicPreview.setForeground(Color.WHITE);
@@ -397,36 +337,12 @@ public class GUI {
 							OriginalPicPreview.setIcon(img);
 							
 						}
-						
-						
-						//OriginalPicPreview.setText(line);
-						
-						/*
-						ArrayList<String> listOfStrings = new ArrayList<>();
-						listOfStrings.add(line);
 
-						while(line != null)
-						{
-						   line = br.readLine();
-						   listOfStrings.add(line);
-						}
-						
-						for(int i = 0; i < listOfStrings.size(); i++) {
-							OriginalPicPreview.append(listOfStrings.get(i));
-							System.out.println(listOfStrings.get(i));
-						}
-						*/
-
-						
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Operation Failed", "Please retry", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
-				
-				
-				
 			}
 			
 		});
