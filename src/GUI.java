@@ -13,9 +13,11 @@ import javax.imageio.ImageIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -33,19 +35,19 @@ public class GUI {
 	// encodedResult contains all the past encoded result paths.
 	public ArrayList<EncodedResult> encodedResult = new ArrayList<EncodedResult>();
 	public ArrayList<DecodedResult> decodeResult = new ArrayList<DecodedResult>();
-	private String coverImagePath; //p1
-	private String coverImageExtensionType; //jpg
-	private String secretFilePath; //p2	
-	private String saveAsPath;//p3
+	private String coverImagePath; // p1
+	private String coverImageExtensionType; // jpg
+	private String secretFilePath; // p2
+	private String saveAsPath;// p3
 	private JFrame frame;
 	private JTextField txtDecodePathFile;
-	
-	private String DecrptFilePath; 
+
+	private String DecrptFilePath;
 	private JPanel panelEncodeResults;
 	private JTabbedPane tabbedPane;
 	private JLabel encodeResultsCoverPreview;
 	private JLabel encodeResultsStegoedPreview;
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -72,6 +74,9 @@ public class GUI {
 		tabbedPane.setBounds(0, 0, 998, 675);
 		frame.getContentPane().add(tabbedPane);
 
+		//////////////////
+		// Encode
+		//////////////////
 		JPanel panelEncode = new JPanel();
 		panelEncode.setForeground(Color.WHITE);
 		panelEncode.setBackground(new Color(112, 128, 144));
@@ -139,9 +144,24 @@ public class GUI {
 			public void actionPerformed(ActionEvent e) {
 				secretFilePath = HelperFunctions.SelectFile();
 				txtSecretFilePath.setText(secretFilePath);
-				ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage()
+
+				String fileType = HelperFunctions.GetFileExtension(secretFilePath);
+
+				// preview in label for txt, all else, try to set as image
+				if (fileType.equals("txt")) {
+					Path fileName = Path.of(secretFilePath);
+					String secret = null;
+					try {
+						secret = Files.readString(fileName);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					secretImage.setText(secret);
+				} else {
+					ImageIcon img = new ImageIcon(new ImageIcon(secretFilePath).getImage()
 						.getScaledInstance(coverImage.getWidth(), coverImage.getHeight(), Image.SCALE_SMOOTH));
-				secretImage.setIcon(img);
+					secretImage.setIcon(img);
+				}
 			}
 		});
 		btnChooseSecret.setBounds(875, 49, 103, 23);
@@ -156,6 +176,7 @@ public class GUI {
 				coverImageExtensionType = "";
 				saveAsPath = "";
 				secretImage.setIcon(null);
+				secretImage.setText("Secret Preview (If applicable)");
 				coverImage.setIcon(null);
 				txtCoverFilePath.setText("No file chosen");
 				txtSecretFilePath.setText("No file chosen");
@@ -216,6 +237,14 @@ public class GUI {
 		btnGenerate.setBounds(6, 577, 476, 46);
 		panelEncode.add(btnGenerate);
 
+
+
+
+
+
+		//////////////////
+		// Encode result
+		//////////////////
 		panelEncodeResults.setEnabled(false);
 		tabbedPane.addTab("Encode Result", null, panelEncodeResults, null);
 		tabbedPane.setEnabledAt(tabbedPane.indexOfComponent(panelEncodeResults), false);
@@ -224,7 +253,7 @@ public class GUI {
 
 		encodeResultsCoverPreview = new JLabel("Cover Preview");
 		encodeResultsCoverPreview.setOpaque(true);
-		encodeResultsCoverPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		// encodeResultsCoverPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		encodeResultsCoverPreview.setForeground(Color.WHITE);
 		encodeResultsCoverPreview.setBackground(Color.LIGHT_GRAY);
 		encodeResultsCoverPreview.setBounds(3, 57, 472, 566);
@@ -232,7 +261,7 @@ public class GUI {
 
 		encodeResultsStegoedPreview = new JLabel("Secret Preview (If applicable)");
 		encodeResultsStegoedPreview.setOpaque(true);
-		encodeResultsStegoedPreview.setHorizontalAlignment(SwingConstants.CENTER);
+		// encodeResultsStegoedPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		encodeResultsStegoedPreview.setForeground(Color.WHITE);
 		encodeResultsStegoedPreview.setBackground(Color.LIGHT_GRAY);
 		encodeResultsStegoedPreview.setBounds(487, 57, 484, 566);
@@ -251,6 +280,13 @@ public class GUI {
 		panelEncodeResults.add(lblEncodeResults2);
 		
 		
+
+
+
+
+		//////////////////
+		// Decode
+		//////////////////
 		JPanel panel_decode = new JPanel();
 		panel_decode.setForeground(new Color(0, 0, 0));
 		panel_decode.setBackground(new Color(112, 128, 144));
@@ -318,6 +354,8 @@ public class GUI {
 							
 							String line;
 							
+							decodedTextArea.setText(null);
+
 							while((line = br.readLine()) != null){
 								decodedTextArea.append(line + System.lineSeparator());
 							}
@@ -400,7 +438,7 @@ public class GUI {
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setForeground(new Color(112, 128, 144));
 		lblNewLabel.setBackground(new Color(112, 128, 144));
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Nilia\\OneDrive\\Pictures\\photo-1508796079212-a4b83cbf734d.jpg"));
+		// lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Nilia\\OneDrive\\Pictures\\photo-1508796079212-a4b83cbf734d.jpg"));
 		lblNewLabel.setBounds(0, 11, 981, 638);
 		panel_decode.add(lblNewLabel);
 	}
@@ -415,15 +453,21 @@ public class GUI {
 		tabbedPane.setEnabledAt(panelEncodeResultsIndex, true);
 		tabbedPane.setSelectedIndex(panelEncodeResultsIndex);
 
+		int encodeResultsCoverPreviewWidth = encodeResultsCoverPreview.getWidth();
+		int encodeResultsCoverPreviewHeight = encodeResultsCoverPreview.getWidth();
+
 		// grab images from encodedresult and slap them into the labels
 		ImageIcon encodeResultsCoverImage = new ImageIcon(encodedResult.get(encodedResult.size()-1).vesselPath.toUri().toURL());
 		ImageIcon encodeResultsStegoedImage = new ImageIcon(encodedResult.get(encodedResult.size()-1).outputPath.toUri().toURL());
-		encodeResultsCoverPreview.setIcon(encodeResultsCoverImage);
-		encodeResultsStegoedPreview.setIcon(encodeResultsStegoedImage);
+		ImageIcon encodeResultsCoverImageScaled = new ImageIcon(
+			encodeResultsCoverImage.getImage().getScaledInstance(encodeResultsCoverPreviewWidth, encodeResultsCoverPreviewHeight, Image.SCALE_SMOOTH));
+		ImageIcon encodeResultsStegoedImageScaled = new ImageIcon(
+			encodeResultsStegoedImage.getImage().getScaledInstance(encodeResultsCoverPreviewWidth, encodeResultsCoverPreviewHeight, Image.SCALE_SMOOTH));
+		encodeResultsCoverPreview.setIcon(encodeResultsCoverImageScaled);
+		encodeResultsStegoedPreview.setIcon(encodeResultsStegoedImageScaled);
 	}
 
 	// roll ur own getter setters here
-
 	public void frameSetVisible(Boolean visible){
 		this.frame.setVisible(visible);
 	}
