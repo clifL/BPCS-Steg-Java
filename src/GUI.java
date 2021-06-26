@@ -429,7 +429,7 @@ public class GUI {
 		btnClear_1.setBounds(271, 588, 199, 33);
 		panel_decode.add(btnClear_1);
 		
-		JLabel lblUpload = new JLabel("Upload Encode Image");
+		JLabel lblUpload = new JLabel("Upload Encoded Image");
 		lblUpload.setForeground(Color.WHITE);
 		lblUpload.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 14));
 		lblUpload.setBounds(20, 15, 164, 23);

@@ -1,6 +1,11 @@
 package BPCS;
 
 import java.util.*;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.File;
 import java.nio.file.*;
 
 public class Extractor {
@@ -14,8 +19,20 @@ public class Extractor {
         System.out.println("Converted to bytes: " + resultHiderSegments.size() * 63 / 8192 + " KB");
 
         FileFinder secret = new FileFinder(resultHiderSegments);
-        List<Path> extractedPayloadPaths = secret.extractPayload(outputPath);
+        Path decodedPath = Path.of(SaveFile());
+        List<Path> extractedPayloadPaths = secret.extractPayload(decodedPath);
 
         return extractedPayloadPaths;
     }
+    
+    
+    public static String SaveFile()
+	{
+    	JFileChooser f = new JFileChooser(System.getProperty("user.dir"));
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+        f.showSaveDialog(null);
+        String decodedPath = f.getSelectedFile().toString();
+        return decodedPath;
+	}
+	
 }
